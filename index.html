@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="en"> 
+ <head> 
+  <meta charset="UTF-8"> 
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+  <title>Automatic Dark/Light Theme Time Counter</title> 
+  <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        body {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            transition: background 0.3s, color 0.3s;
+            text-align: center;
+            position: relative; /* Positioning context for the toggle button */
+        }
+
+        /* Light theme styles */
+        body.light {
+            background: linear-gradient(135deg, #dfe9f3, #ffffff);
+            color: #333;
+        }
+
+        /* Dark theme styles */
+        body.dark {
+            background: radial-gradient(circle, #1a1a1a, #000000);
+            color: #ffffff;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.8);
+            padding: 2em;
+            border-radius: 15px;
+            box-shadow: 0px 8px 25px rgba(0, 0, 0, 0.1);
+            max-width: 350px;
+            border: 1px solid rgba(200, 200, 200, 0.3);
+            transition: background 0.3s, box-shadow 0.3s;
+            position: relative;
+        }
+
+        body.dark .container {
+            background: rgba(0, 0, 0, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0px 8px 25px rgba(0, 0, 0, 0.5);
+        }
+
+        .time {
+            font-size: 3em;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #4A90E2;
+        }
+
+        .date {
+            font-size: 1.2em;
+            margin-bottom: 15px;
+            color: #888;
+        }
+
+        .greeting {
+            font-size: 1.1em;
+            color: #FF8A65;
+            font-weight: 400;
+            letter-spacing: 0.5px;
+        }
+
+        .search-button {
+            display: inline-flex;
+            align-items: center;
+            text-decoration: none;
+            color: #4A90E2;
+            margin-top: 20px;
+            font-size: 1.1em;
+            font-weight: bold;
+            padding: 10px 15px;
+            border-radius: 8px;
+            background: rgba(74, 144, 226, 0.15);
+            transition: background 0.3s, transform 0.2s;
+        }
+
+        .search-button:hover {
+            background: rgba(74, 144, 226, 0.3);
+            transform: scale(1.05);
+        }
+
+        .search-button span {
+            margin-right: 8px;
+            font-size: 1.3em;
+        }
+
+        /* Round toggle button */
+        .toggle-button {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 40px;
+            height: 40px;
+            border: none;
+            border-radius: 50%;
+            background-color: #4A90E2;
+            color: white;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color 0.3s;
+        }
+
+        .toggle-button:hover {
+            background-color: #357ABD;
+        }
+    </style> 
+ </head> 
+ <body class="light"> 
+  <div class="container"> 
+   <div class="time" id="time">
+    --:--:-- AM
+   </div> 
+   <div class="date" id="date">
+    --
+   </div> 
+   <div class="greeting" id="greeting">
+    Good day!
+   </div> <!-- Google Search Icon/Button --> <a href="https://www.google.com" target="_blank" class="search-button"> <span>🔍</span> Go to Google </a> 
+  </div> <!-- Round Toggle Button --> <button class="toggle-button" onclick="toggleTheme()">🌙</button> 
+  <script>
+        function updateTime() {
+            const now = new Date();
+            let hours = now.getHours();
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const seconds = String(now.getSeconds()).padStart(2, '0');
+
+            // Convert 24-hour time to 12-hour format and determine AM/PM
+            const amPm = hours >= 12 ? 'PM' : 'AM';
+            hours = hours % 12 || 12; // Convert hour '0' to '12'
+
+            const timeStr = `${hours}:${minutes}:${seconds} ${amPm}`;
+            document.getElementById('time').textContent = timeStr;
+
+            // Display date in a readable format
+            const dateStr = now.toLocaleDateString(undefined, {
+                weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
+            });
+            document.getElementById('date').textContent = dateStr;
+
+            // Set greeting based on time of day
+            const greeting = document.getElementById('greeting');
+            if (now.getHours() < 12) {
+                greeting.textContent = 'Good morning! 🌅';
+            } else if (now.getHours() < 18) {
+                greeting.textContent = 'Good afternoon! ☀️';
+            } else {
+                greeting.textContent = 'Good evening! 🌙';
+            }
+        }
+
+        function autoSetTheme() {
+            const hour = new Date().getHours();
+            const body = document.body;
+
+            // Change theme based on hour
+            if (hour >= 6 && hour < 18) {
+                body.classList.add('light');
+                body.classList.remove('dark');
+            } else {
+                body.classList.add('dark');
+                body.classList.remove('light');
+            }
+        }
+
+        setInterval(updateTime, 1000);
+        autoSetTheme(); // Automatically set the theme on page load
+
+        // Toggle between dark and light themes
+        function toggleTheme() {
+            const body = document.body;
+            body.classList.toggle('dark');
+            body.classList.toggle('light');
+        }
+    </script> 
+ 
+</body></html>
