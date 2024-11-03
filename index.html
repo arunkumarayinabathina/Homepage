@@ -149,16 +149,7 @@
             });
             document.getElementById('date').textContent = dateStr;
 
-            // Set greeting based on time of day
-            const greeting = document.getElementById('greeting');
-            if (now.getHours() < 12) {
-                greeting.textContent = 'Good morning! 🌅';
-            } else if (now.getHours() < 18) {
-                greeting.textContent = 'Good afternoon! ☀️';
-            } else {
-                greeting.textContent = 'Good evening! 🌙';
-            }
-        }
+            
 
         function autoSetTheme() {
             const hour = new Date().getHours();
